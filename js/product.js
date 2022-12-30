@@ -1,5 +1,6 @@
 class Product{
 
+
     productId
     productName
     productPrice

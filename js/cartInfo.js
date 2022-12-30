@@ -1,10 +1,9 @@
 class CartInfo{
 
+
     product
 
     quantity
-
-    total
 
 
     constructor(product, quantity)
@@ -31,8 +30,4 @@ class CartInfo{
         this.quantity = quantity;
     }
 
-    getTotal()
-    {
-        return this.product.getProductPrice() * this.quantity;
-    }
 }

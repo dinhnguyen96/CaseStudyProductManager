@@ -68,7 +68,7 @@ function productDetail(index)
 {
     let item = products[index];
 
-    let content = `<h2 class="section-title">Thông tin sản Phẩm</h2>`;
+    let content = `<h2 class="section-title">Thông tin sản phẩm</h2>`;
     content += `
              <div class="shop-content">
              <div class="product-box">
