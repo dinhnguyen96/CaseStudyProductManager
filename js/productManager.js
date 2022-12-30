@@ -8,7 +8,8 @@ if (storage)
 let categories = [new Categories(1, "Điện thoại"),
                   new Categories(2, "Laptop"),
                   new Categories(3,"Tai nghe"),
-                  new Categories(4,"Tablet")];
+                  new Categories(4,"Đồng hồ"),
+                  new Categories(5,"Loa")];
 
 let products = [new Product(1,"Điện thoại Samsung Galaxy Z Flip4 128GB",
     20990000,"/images/img01.jpg",
@@ -43,9 +44,40 @@ let products = [new Product(1,"Điện thoại Samsung Galaxy Z Flip4 128GB",
                  "Chip Apple M2 vẫn được sản xuất ở tiến trình 5 nm với 4 nhân hiệu năng cao và 4 nhân tiết kiệm kiệm như dòng M1 nhưng tốc độ băng thông đã được cải tiến vượt trội lên đến 100GB/s, cùng với đó là sự trợ giúp của 20 nghìn tỷ bóng bán dẫn giúp hiệu suất hoạt động được nâng cao hơn 18% so với phiên bản tiền nhiệm, đảm bảo vận hành trơn tru mọi tác vụ học tập, làm việc từ cơ bản đến nâng cao",
                    categories[1].getCategoriesId())];
 
+function categoriresOfProductList(categoriesName)
+{
+    if (categoriesName === "Tất cả")
+    {
+        productListDisplay();
+        return;
+    }
+    let categoriesId, content = `<h2 class="section-title">Danh sách sản phẩm</h2>`;
+    for (let i = 0; i < categories.length;i++)
+    {
+        if (categories[i].getCategoriesName() == categoriesName)
+        {
+               categoriesId = categories[i].getCategoriesId();
+               break;
+        }
+    }
+    for (let i = 0; i < products.length;i++)
+    {
+        if (products[i].getCategoriesId() ==  categoriesId)
+        {
+            content += `
+             <div class="shop-content">
+             <div class="product-box">
+              <a href = "#"><img src="${products[i].getProductImage()}" onclick="productDetail('${i}')" alt=""  class="product-img"></a>
+              <h2 class="product-title" onclick="productDetail('${i}')" ><a href = "#">${products[i].getProductName()}</a></h2>
+              <span class="price">${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(products[i].getProductPrice())}</span>
+              <button type="button" class="btn-buy" onclick="addtoCart('${i}')">Thêm giỏ hàng</button>`;
+        }
+    }
+    document.getElementById("shop_product").innerHTML = content;
+}
 function productListDisplay()
 {
-    let content = `<h2 class="section-title">Sản Phẩm</h2>`;
+    let content = `<h2 class="section-title">Danh sách sản phẩm</h2>`;
     for (let i = 0; i < products.length;i++)
     {
         content += `
@@ -55,7 +87,6 @@ function productListDisplay()
               <h2 class="product-title" onclick="productDetail('${i}')" ><a href = "#">${products[i].getProductName()}</a></h2>
               <span class="price">${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(products[i].getProductPrice())}</span>
               <button type="button" class="btn-buy" onclick="addtoCart('${i}')">Thêm giỏ hàng</button>
-             
     </div>
   </div>`;
     }
@@ -170,6 +201,9 @@ function total()
     });
     return sum;
 }
+
+
+
 
 
 
