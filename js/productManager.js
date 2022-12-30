@@ -1,10 +1,16 @@
+let storage = sessionStorage.getItem("cartResult");
 let shoppingcart = [];
+if (storage)
+{
+    shoppingcart = JSON.parse(storage);
+}
+
 let categories = [new Categories(1, "Điện thoại"),
                   new Categories(2, "Laptop"),
                   new Categories(3,"Tai nghe"),
                   new Categories(4,"Tablet")];
 
-let products = [new Product(1, "Điện thoại Samsung Galaxy Z Flip4 128GB",
+let products = [new Product(1,"Điện thoại Samsung Galaxy Z Flip4 128GB",
     20990000,"/images/img01.jpg",
      "Có lẽ điện thoại gập đã không còn là cái tên quá xa lạ bởi nhiều ông lớn trong ngành sản xuất thiết bị di động đã cho ra mắt khá nhiều sản phẩm có thiết kế tương tự, gần đây nhất thì có sự góp mặt của chiếc flagship đến từ nhà Samsung mang tên Galaxy Z Flip4",
       categories[0].getCategoriesId()),
@@ -24,94 +30,166 @@ let products = [new Product(1, "Điện thoại Samsung Galaxy Z Flip4 128GB",
              23190000,"/images/img05.jpg",
               "Lenovo IdeaPad Gaming 3 sở hữu một thiết kế góc cạnh cùng gam màu trắng pha lẫn các chi tiết xanh tạo nên một tổng thể vô cùng mạnh mẽ, hầm hố nhưng không kém phần sang trọng. Tuy có lớp vỏ từ nhựa nhưng cảm giác cầm nắm, xách lên di chuyển rất chắc chắn và không ọp ẹp",
                categories[1].getCategoriesId()),
-         new Product(6, "Laptop Asus TUF Gaming FX517ZC i5",
+         new Product(6,"Laptop Asus TUF Gaming FX517ZC i5",
              28990000,"/images/img06.jpg",
               " mang hiệu năng vượt trội cho khả năng giải quyết trơn tru các tác vụ phức tạp như thiết kế hình ảnh, render video,... trên các ứng dụng nhà Adobe hay thoả sức chiến các tựa game hot như CS:GO, GTA V",
                 categories[1].getCategoriesId()),
-          new Product(7, "Laptop Acer Nitro 5 Gaming AN515 57 553E i5",
+          new Product(8, "Laptop Acer Nitro 5 Gaming AN515 57 553E i5",
               24990000,"/images/img07.jpg",
                    "Sở hữu hiệu năng mạnh mẽ của CPU Intel Core i5 11400H, đi kèm card màn hình rời RTX 3050 4 GB cung cấp khả năng chiến game mượt mà, các tác vụ hằng ngày như: Word, Excel, PowerPoint,... hay thiết kế đồ hoạ Premiere, After Effect, Photoshop,... sẽ không làm khó được chiếc laptop này.",
                     categories[1].getCategoriesId()),
-          new Product(8,"Laptop Apple MacBook Air M2 2022 16GB",
+          new Product(9,"Laptop Apple MacBook Air M2 2022 16GB",
               46990000,"/images/img08.jpg",
                  "Chip Apple M2 vẫn được sản xuất ở tiến trình 5 nm với 4 nhân hiệu năng cao và 4 nhân tiết kiệm kiệm như dòng M1 nhưng tốc độ băng thông đã được cải tiến vượt trội lên đến 100GB/s, cùng với đó là sự trợ giúp của 20 nghìn tỷ bóng bán dẫn giúp hiệu suất hoạt động được nâng cao hơn 18% so với phiên bản tiền nhiệm, đảm bảo vận hành trơn tru mọi tác vụ học tập, làm việc từ cơ bản đến nâng cao",
                    categories[1].getCategoriesId())];
 
 function productListDisplay()
 {
-    let content = "";
+    let content = `<h2 class="section-title">Sản Phẩm</h2>`;
     for (let i = 0; i < products.length;i++)
     {
-        content += `<tr>
-                         <td>${products[i].getProductId()}</td>
-                          <td>${products[i].getProductName()}</td>
-                          <td>${products[i].getProductPrice()}</td>
-                          <td><img src= "${products[i].getProductImage()}" width="100" height="100"></td>
-                          <td>${products[i].getProductDescribe()}</td>
-                          <td><button type="button" onclick="addtoCart('${i}')"><a href="../shoppingCart.html">Thêm giỏ hàng</a> </button> </td>>
-                     </tr>`;
+        content += `
+             <div class="shop-content">
+             <div class="product-box">
+              <a href = "#"><img src="${products[i].getProductImage()}" onclick="productDetail('${i}')" alt=""  class="product-img"></a>
+              <h2 class="product-title" onclick="productDetail('${i}')" ><a href = "#">${products[i].getProductName()}</a></h2>
+              <span class="price">${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(products[i].getProductPrice())}</span>
+              <button type="button" class="btn-buy" onclick="addtoCart('${i}')">Thêm giỏ hàng</button>
+             
+    </div>
+  </div>`;
     }
-    document.getElementById("productData").innerHTML = content;
+    document.getElementById("shop_product").innerHTML = content;
 }
 productListDisplay();
 
 
-function shoppingCartExits(index)
+function productDetail(index)
 {
-    for (let i = 0; i < shoppingcart.length;i++)
-    {
-        if (shoppingcart[i].getCategoriesId() === products[index].getCategoriesId()) {
-            return i;
-        }
-    }
-    return -1;
+    let item = products[index];
+
+    let content = `<h2 class="section-title">Thông tin sản Phẩm</h2>`;
+    content += `
+             <div class="shop-content">
+             <div class="product-box">
+             <img src="${item.getProductImage()}"  alt=""  class="product-img">
+              <h2 class="product-title">${item.getProductName()}</h2>
+              <span class="price">${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(item.getProductPrice())}</span>
+               <h2 class="product-title">${item.getProductDescribe()}</h2>
+              <button type="button" class="btn-buy" onclick="addtoCart('${index}')">Thêm giỏ hàng</button>`
+
+    document.getElementById("shop_product").innerHTML = content;
 }
 
-function addtoCart(index)
-{
-    let position = shoppingCartExits(index);
-    let cartInfo;
 
-    if (position === -1)
+function quantityUpdate(id)
+{
+    shoppingcart.map(item => {
+        if (item.product.productId == id)
+        {
+            let itemIndex = shoppingcart.indexOf(item);
+
+            item.quantity = document.getElementsByClassName("cart-quantity")[itemIndex].value;;
+        }
+    });
+    sessionStorage.setItem("cartResult", JSON.stringify(shoppingcart));
+    shoppingCartDisplay();
+}
+function shoppingCartDisplay()
+{
+    let content =``;
+    if (shoppingcart.length === 0)
     {
-        cartInfo = new CartInfo();
-        cartInfo.setQuantity(1);
-        cartInfo.setProduct(products[index]);
-        shoppingcart.push(cartInfo);
+        document.getElementById("content").innerHTML = "Giỏ hàng của bạn đang trống  "
     }
     else
     {
-        cartInfo = shoppingcart[position];
-        cartInfo.setQuantity(cartInfo.getQuantity()+1);
+        shoppingcart.map(item => {
+            content += `
+            <div class="cart-box">
+              <img src="${item.product.productImage}" alt="" class="cart-img">
+              <div class="detail-box">
+                <div class="cart-product-title">${item.product.productName}</div>
+                <div class="cart-price">${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(item.product.productPrice)}</div>
+                <input type="number"  onchange="quantityUpdate('${item.product.productId}')" value="${item.quantity}" min = 1 class="cart-quantity">
+              </div>
+              <i class='bx bxs-trash-alt cart-remove' onclick="removeShoppingCart('${item.product.productId}')"></i>
+            </div>`;
+            })
+        content += `<div class="total">
+            <div class="total-title">Tổng tiền</div>
+            <div class="total-price" >${new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(total())}  </div>
+          </div>
+          <button type="button" class="btn-buy">Mua ngay</button>
+          <i class='bx bx-x' id="close-cart" onclick="shoppingCartItemsClear()"></i>`;
+        document.getElementById("content").innerHTML =content;
     }
-    sessionStorage.setItem("shoppingCart", shoppingcart.join(""));
-
-    let content = "";
-
-    for(let i = 0; i < shoppingcart.length;i++)
-    {
-        content+= `<tr class="alert" role="alert">
-              <td>
-                <div class="img" style="background-image: url(${shoppingcart[i].getProduct().getProductImage()});"></div>
-              </td>
-              <td>
-                <div class="email">
-                  <span>${shoppingcart[i].getProduct().getProductName()} </span>
-                </div>
-              </td>
-              <td>$44.99</td>
-              <td class="quantity">
-                <div class="input-group">
-                  <input type="text" name="quantity" class="quantity form-control input-number" value="${shoppingcart[i].getQuantity()}" min="1" max="100">
-                </div>
-              </td>
-              <td>${shoppingcart[i].getTotal()}</td>
-              <td>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true"><i class="fa fa-close"></i></span>
-                </button>
-              </td>
-            </tr>`;
-    }
-    document.getElementById("shoppingData").innerHTML = content;
 }
+shoppingCartDisplay();
+
+function addtoCart(index)
+{
+    let item = shoppingcart.find(value => value.product.productId === products[index].getProductId())
+
+    if (item)
+    {
+        item.quantity++;
+    }
+    else
+    {
+        shoppingcart.push(new CartInfo( products[index],1));
+    }
+    sessionStorage.setItem("cartResult", JSON.stringify(shoppingcart));
+    shoppingCartDisplay();
+}
+
+function removeShoppingCart(id)
+{
+    shoppingcart.map(item => {
+         if (item.product.productId == id)
+         {
+            shoppingcart.splice(shoppingcart.indexOf(item),1);
+         }
+    });
+
+    sessionStorage.setItem("cartResult", JSON.stringify(shoppingcart));
+    shoppingCartDisplay();
+}
+function shoppingCartItemsClear()
+{
+    shoppingcart = [];
+    sessionStorage.clear();
+    shoppingCartDisplay();
+}
+
+function total()
+{
+    let sum = 0;
+    shoppingcart.map(item => {
+        sum = sum + (item.quantity * item.product.productPrice);
+    });
+    return sum;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
