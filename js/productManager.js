@@ -159,6 +159,8 @@ function productDetail(index)
 }
 
 
+
+
 function quantityUpdate(id)
 {
     shoppingcart.map(item => {
@@ -166,7 +168,13 @@ function quantityUpdate(id)
         {
             let itemIndex = shoppingcart.indexOf(item);
 
-            item.quantity = document.getElementsByClassName("cart-quantity")[itemIndex].value;;
+            let updateQuantity = document.getElementsByClassName("cart-quantity")[itemIndex].value;
+
+            if (updateQuantity <= 0)
+            {
+                updateQuantity = 1;
+            }
+            item.quantity =  updateQuantity;
         }
     });
     sessionStorage.setItem("cartResult", JSON.stringify(shoppingcart));
